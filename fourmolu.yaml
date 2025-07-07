@@ -1,0 +1,4 @@
+indentation: 2
+respectful: true
+trailing-section-operators: false
+import-grouping: by-scope
