@@ -13,7 +13,9 @@ eval e = maybe e eval (step e)
 step :: DExpr -> Maybe DExpr
 step = \case
   DApp (DAbs m) x -> Just (subst 0 x m) -- directly reducible application
-  DApp x y -> fmap (`DApp` y) (step x) -- reduce left first
+  DApp x y -> case step x of
+    Just x' -> Just (DApp x' y) -- try reducing left side first
+    Nothing -> DApp x <$> step y
   DAbs m -> DAbs <$> step m
   _ -> Nothing -- signal irreducibility
 
