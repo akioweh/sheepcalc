@@ -1,11 +1,22 @@
-module Parser (parseExpr) where
+module Parser (
+  parseExpr,
+  parseLine,
+  Stmt (..),
+) where
 
 import Control.Applicative (some)
 import Syntax
 import Text.Parsec
 import Text.Parsec.String (Parser)
 
--- | this does what it does
+data Stmt
+  = SExpr NExpr
+  | SDef Name NExpr
+  | SCmd String
+
+parseLine :: String -> Either ParseError Stmt
+parseLine = parse (spaces *> stmt <* eof) "<repl>"
+
 parseExpr :: String -> Either ParseError NExpr
 parseExpr = parse (spaces *> expr <* eof) "<repl>"
 
@@ -14,6 +25,25 @@ lexeme p = p <* spaces
 
 symbol :: Char -> Parser Char
 symbol = lexeme . char
+
+keyword :: String -> Parser String
+keyword = lexeme . string
+
+stmt :: Parser Stmt
+stmt =
+  try def
+    <|> cmd
+    <|> SExpr
+    <$> expr
+
+cmd :: Parser Stmt
+cmd = SCmd <$> (symbol ':' *> many1 (noneOf "\n"))
+
+def :: Parser Stmt
+def = do
+  _ <- keyword ":def"
+  ident <- identifier
+  SDef ident <$> expr
 
 expr :: Parser NExpr
 expr = chainl1 atom (pure NApp)
@@ -36,4 +66,4 @@ var :: Parser NExpr
 var = NVar <$> identifier
 
 identifier :: Parser String
-identifier = lexeme ((:) <$> letter <*> many (alphaNum <|> char '\'')) <?> "variable"
+identifier = lexeme (many1 (noneOf " ()\\.=\n\tλ")) <?> "variable name"

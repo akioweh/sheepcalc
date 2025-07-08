@@ -1,16 +1,23 @@
-module Repl (repl) where
+module Repl (
+  repl,
+) where
 
-import Control.Monad (forever)
+import Data.Map.Strict qualified as M
 import Data.Text.IO qualified as T
-import DeBruijin
-import Eval
+import Env (fullEval)
 import Parser
 import Pretty
-import System.Exit (exitSuccess)
 
 repl :: IO ()
-repl = forever $ do
-  putStr "> "
-  getLine >>= \case
-    ":q" -> exitSuccess
-    nexpr -> either print (T.putStrLn . pretty . eval . fromNamed) (parseExpr nexpr)
+repl = loop M.empty
+ where
+  loop env = do
+    putStr "sheepcalc|> "
+    l <- getLine
+    case parseLine l of
+      Left e -> print e >> loop env
+      Right s -> case s of
+        SCmd "q" -> pure ()
+        SCmd cmd -> putStrLn ("unknown command: " ++ cmd) >> loop env
+        SDef n nexpr -> putStrLn ("defined: " ++ n) >> loop (M.insert n (fullEval env nexpr) env)
+        SExpr nexpr -> (T.putStrLn . pretty . fullEval env) nexpr >> loop env

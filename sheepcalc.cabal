@@ -68,6 +68,7 @@ executable sheepcalc
                       Pretty
                       Parser
                       Repl
+                      Env
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
