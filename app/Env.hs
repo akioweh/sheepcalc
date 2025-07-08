@@ -9,6 +9,7 @@ import Data.Char (isDigit)
 import Data.Map qualified as M
 import DeBruijin
 import Eval (eval)
+import Std (church)
 import Syntax
 
 type Env = M.Map Name DExpr
@@ -29,10 +30,3 @@ resolve env = go
   go (DAbs m) = DAbs (go m)
   go (DApp x y) = DApp (go x) (go y)
   go vb@(BoundVar _) = vb
-
--- | linearly constructs the Church Numeral representing n
-church :: Int -> DExpr
-church n = DAbs (DAbs (go n))
- where
-  go 0 = BoundVar 0
-  go k = DApp (BoundVar 1) (go . pred $ k)
