@@ -2,22 +2,23 @@ module Repl (
   repl,
 ) where
 
-import Data.Map.Strict qualified as M
 import Data.Text.IO qualified as T
-import Env (fullEval)
+import Env (Env, fullEval, loadDef)
 import Parser
 import Pretty
 
-repl :: IO ()
-repl = loop M.empty
- where
-  loop env = do
-    putStr "sheepcalc|> "
-    l <- getLine
-    case parseLine l of
-      Left e -> print e >> loop env
-      Right s -> case s of
-        SCmd "q" -> pure ()
-        SCmd cmd -> putStrLn ("unknown command: " ++ cmd) >> loop env
-        SDef n nexpr -> putStrLn ("defined: " ++ n) >> loop (M.insert n (fullEval env nexpr) env)
-        SExpr nexpr -> (T.putStrLn . pretty . fullEval env) nexpr >> loop env
+-- | interpreter entry-point (self-recursive)
+repl :: Env -> IO ()
+repl env = do
+  putStr "sheepcalc|> "
+  l <- getLine
+  case parseLine l of
+    Left e -> print e >> repl env
+    Right s -> case s of
+      SCmd "q" -> return ()
+      SCmd cmd -> putStrLn ("unknown command: " ++ cmd) >> repl env
+      SDef n nexpr -> do
+        let env' = loadDef env (n, nexpr)
+        putStrLn ("defined: " ++ n)
+        repl env'
+      SExpr nexpr -> (T.putStrLn . pretty . fullEval env) nexpr >> repl env

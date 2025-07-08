@@ -10,7 +10,8 @@ REPL-like interface.
 Each line of input can be either an expression or an interpreter command.  
 Inputs are treated as expressions by default, unless it starts with a colon (`:`), in which case it is a command.
 
-Expressions are "evaluated" by reducing to normal form.
+Expressions are "evaluated" by reducing to normal form.  
+Free variables are supported, but output is only in De Brujin Indexed form right now.
 
 **Expression syntax** support:
 
@@ -37,6 +38,28 @@ This also means that you can use named expressions in the RHS of definitions.
 (Although note that identifiers are only substituted once, so you cannot define recursion like this.)
 
 TIP: to check the definition of an identifier, just write it as a standalone expression in the prompt.
+
+### Built-in Named Expressions
+
+I've hardcoded an automatic loading of a small set of definitions because yes:
+
+```Haskell
+stddefs =
+  [ ("TRUE", "\\t f. t")
+  , ("FALSE", "\\t f. f")
+  , ("IF", "\\b t f. b t f")
+  , ("NOT", "\\b. IF b FALSE TRUE")
+  , ("AND", "\\x y. IF x (IF y TRUE FALSE) FALSE")
+  , ("OR", "\\x y. IF (AND (NOT x) (NOT y)) FALSE TRUE")
+  , ("SUCC", "\\n f x. f (n f x)")
+  , ("PRED", "\\n f x. n (\\g h. h (g f)) (\\u. x) (\\u. u)")
+  , ("ADD", "\\m n f x. m f (n f x)")
+  , ("MUL", "\\x y . x (ADD y) 0")
+  ]
+
+```
+
+Yes, some of them might be funny, whatever.
 
 ## Haskell stuff used
 
