@@ -26,7 +26,7 @@ subst t r = \case
     | v == t -> r
     | v > t -> BoundVar (v - 1)
     | otherwise -> BoundVar v
-  FreeVar v -> FreeVar v
+  fv@(FreeVar _) -> fv
   DAbs m -> DAbs (subst (t + 1) (reindex 1 r) m)
   DApp x y -> DApp (subst t r x) (subst t r y)
 
@@ -39,6 +39,6 @@ reindex d = go 0
     BoundVar v
       | v >= i -> BoundVar (v + d)
       | otherwise -> BoundVar v -- bound variable
-    FreeVar v -> FreeVar v
+    fv@(FreeVar _) -> fv
     DAbs m -> DAbs (go (i + 1) m)
     DApp x y -> DApp (go i x) (go i y)
