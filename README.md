@@ -6,12 +6,12 @@ but i'll add more features to make it more usable.
 ## Usage
 
 REPL-like interface.  
-`>` is prompt.  
+`sheepcalc|> ` is prompt.  
 Each line of input can be either an expression or an interpreter command.  
 Inputs are treated as expressions by default, unless it starts with a colon (`:`), in which case it is a command.
 
 Expressions are "evaluated" by reducing to normal form.  
-Free variables are supported, but output is only in De Brujin Indexed form right now.
+Free variables are supported, but output is only in De Bruijn Indexed form right now.
 
 **Expression syntax** support:
 

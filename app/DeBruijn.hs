@@ -1,4 +1,4 @@
-module DeBruijin (
+module DeBruijn (
   DExpr (..),
   fromNamed,
   reindex,

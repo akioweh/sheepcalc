@@ -3,7 +3,7 @@ module Std (
   stddefs,
 ) where
 
-import DeBruijin
+import DeBruijn
 import Syntax (Name)
 
 -- | linearly constructs the Church Numeral representing n

@@ -3,7 +3,7 @@ module Eval (
   step,
 ) where
 
-import DeBruijin
+import DeBruijn
 
 -- | evaluation through repeated beta-reduction
 eval :: DExpr -> DExpr

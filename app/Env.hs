@@ -11,7 +11,7 @@ module Env (
 import Control.Monad (foldM)
 import Data.Char (isDigit)
 import Data.Map qualified as M
-import DeBruijin
+import DeBruijn
 import Eval (eval)
 import Parser (parseExpr)
 import Std (church)

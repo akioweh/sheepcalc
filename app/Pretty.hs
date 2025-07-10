@@ -3,7 +3,7 @@
 module Pretty (pretty) where
 
 import Data.Text (Text)
-import DeBruijin
+import DeBruijn
 import TextBuilder
 
 -- | pretty printer
