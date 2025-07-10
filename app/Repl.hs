@@ -17,8 +17,7 @@ repl env = do
     Right s -> case s of
       SCmd "q" -> return ()
       SCmd cmd -> putStrLn ("unknown command: " ++ cmd) >> repl env
-      SDef n nexpr -> do
+      SDef n nexpr ->
         let env' = loadDef env (n, nexpr)
-        putStrLn ("defined: " ++ n)
-        repl env'
+         in putStrLn ("defined: " ++ n) >> repl env'
       SExpr nexpr -> (T.putStrLn . pretty . fullEval env) nexpr >> repl env

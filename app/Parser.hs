@@ -30,18 +30,14 @@ keyword :: String -> Parser String
 keyword = lexeme . string
 
 stmt :: Parser Stmt
-stmt =
-  try def
-    <|> cmd
-    <|> SExpr
-    <$> expr
+stmt = try def <|> cmd <|> (SExpr <$> expr)
 
 cmd :: Parser Stmt
-cmd = SCmd <$> (symbol ':' *> many1 (noneOf "\n"))
+cmd = SCmd <$> (symbol ':' *> manyTill anyChar (lookAhead . try $ spaces *> eof))
 
 def :: Parser Stmt
 def = do
-  _ <- keyword ":def"
+  _ <- symbol ':' >> keyword "def"
   ident <- identifier
   SDef ident <$> expr
 
@@ -49,10 +45,7 @@ expr :: Parser NExpr
 expr = chainl1 atom (pure NApp)
 
 atom :: Parser NExpr
-atom =
-  abstraction
-    <|> var
-    <|> between (symbol '(') (symbol ')') expr
+atom = abstraction <|> var <|> between (symbol '(') (symbol ')') expr
 
 abstraction :: Parser NExpr
 abstraction = do
@@ -66,4 +59,4 @@ var :: Parser NExpr
 var = NVar <$> identifier
 
 identifier :: Parser String
-identifier = lexeme (many1 (noneOf " ()\\.=\n\tλ")) <?> "variable name"
+identifier = lexeme (some (noneOf " ()\\.=\n\tλ")) <?> "variable name"

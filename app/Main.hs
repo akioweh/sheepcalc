@@ -10,8 +10,10 @@ main :: IO ()
 main = do
   hSetBuffering stdout NoBuffering
   -- load stddefs
-  case loadStringDefs M.empty stddefs of
-    Left e -> do
-      putStrLn "Error loading standard definitions: "
-      print e
-    Right env -> repl env
+  either
+    ( \e -> do
+        putStrLn "Error loading standard definitions: "
+        print e
+    )
+    repl
+    (loadStringDefs M.empty stddefs)
