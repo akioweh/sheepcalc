@@ -23,6 +23,15 @@ stddefs =
   , ("OR", "\\x y. IF (AND (NOT x) (NOT y)) FALSE TRUE")
   , ("SUCC", "\\n f x. f (n f x)")
   , ("PRED", "\\n f x. n (\\g h. h (g f)) (\\u. x) (\\u. u)")
+  , ("ISZERO", "\\x. x (\\_. FALSE) TRUE")
   , ("ADD", "\\m n f x. m f (n f x)")
-  , ("MUL", "\\x y . x (ADD y) 0")
+  , ("MUL", "\\x y. x (ADD y) 0")
+  , ("SUB", "\\x y. y PRED x")
+  , ("DIFF", "\\x y. ADD (SUB x y) (SUB y x)") -- absolute difference
+  , ("EQ", "\\x y. ISZERO (DIFF x y)")
+  , ("LE", "\\x y. ISZERO (SUB x y)")
+  , ("LT", "\\x y. NOT (LE y x)")
+  , ("FLIP", "\\f x y. f y x")
+  , ("GT", "FLIP LT")
+  , ("GE", "FLIP LE")
   ]
