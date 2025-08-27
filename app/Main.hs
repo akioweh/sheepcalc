@@ -1,10 +1,11 @@
 module Main where
 
 import Data.Map qualified as M
+import System.IO
+
 import Env
 import Repl
 import Std
-import System.IO
 
 main :: IO ()
 main = do

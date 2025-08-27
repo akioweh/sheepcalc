@@ -11,12 +11,13 @@ module Env (
 import Control.Monad (foldM)
 import Data.Char (isDigit)
 import Data.Map qualified as M
+import Text.Parsec (ParseError)
+
 import DeBruijn
 import Eval (eval)
 import Parser (parseExpr)
 import Std (church)
 import Syntax
-import Text.Parsec (ParseError)
 
 type Env = M.Map Name DExpr
 

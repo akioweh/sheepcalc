@@ -3,8 +3,9 @@
 module Pretty (pretty) where
 
 import Data.Text (Text)
-import DeBruijn
 import TextBuilder
+
+import DeBruijn
 
 -- | pretty printer
 pretty :: DExpr -> Text

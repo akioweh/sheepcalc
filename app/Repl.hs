@@ -3,6 +3,7 @@ module Repl (
 ) where
 
 import Data.Text.IO qualified as T
+
 import Env (Env, fullEval, loadDef)
 import Parser
 import Pretty

@@ -5,9 +5,10 @@ module Parser (
 ) where
 
 import Control.Applicative (some)
-import Syntax
 import Text.Parsec
 import Text.Parsec.String (Parser)
+
+import Syntax
 
 data Stmt
   = SExpr NExpr

@@ -6,6 +6,7 @@ module DeBruijn (
 ) where
 
 import Data.Map.Strict qualified as M
+
 import Syntax
 
 -- | best kind of binary tree
