@@ -76,7 +76,7 @@ executable sheepcalc
 
     -- Other library packages from which modules are imported.
     build-depends:    parsec ^>=3.1.18.0
-                    , base ^>=4.21.0.0
+                    , base >= 4.20 && < 4.23
                     , containers >= 0.7
                     , text >= 2.1.0
                     , text-builder
