@@ -17,7 +17,7 @@ Free variables are supported, but output is only in De Bruijn Indexed form right
 
 - `λ` or `\` for binder
 - has sugar to allow multiple parameters per binder
-- `.` separates parameters from body
+- `.` separates parameter(s) from body
 - identifiers (variables) are arbitrary strings (not containing any of `()λ\.=`) delimited by spaces
   - IMPORTANT: you must insert spaces between adjacent but separate variables;
   - will add feature to toggle a "single char variable" parse mode
@@ -41,7 +41,7 @@ TIP: to check the definition of an identifier, just write it as a standalone exp
 
 ### Built-in Named Expressions
 
-I've hardcoded an automatic loading of a small set of definitions because yes:
+I've hard-coded the automatic loading of a small set of definitions because yes:
 
 ```Haskell
 stddefs =
@@ -73,13 +73,13 @@ Yes, some of them might be funny, whatever.
 ## Haskell stuff used
 
 - ADTs (might see if i can make use of GADTs)
-- loads of recursive structural traversal
-- loads of pattern matching, case blocks, guards
-- mondas, for control, short-circuiting, error propagation, IO, parsing, etc.
+- recursive structural traversal
+- pattern matching, case blocks, guards
+- monads, for control, short-circuiting, error propagation, IO, parsing...
   - do blocks, operators like `>>=`, `<$>`, `<*>`, `>>`
 - "lambdaCase" (nice point-free language feature)
 - point-free style / composition
 - modules
 - cabal (build system)
-- Parsec / grammar parser
+- Parsec (parser lib)
 - state-keeping
