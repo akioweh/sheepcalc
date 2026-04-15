@@ -64,6 +64,7 @@ stddefs =
   , ("FLIP", "\\f x y. f y x")
   , ("GT", "FLIP LT")
   , ("GE", "FLIP LE")
+  , ("Y", "\\f. (\\x. f (x x)) (\\x. f (x x))")
   ]
 
 ```
