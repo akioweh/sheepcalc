@@ -1,7 +1,8 @@
 module Main where
 
+import Data.IORef (newIORef)
 import Data.Map qualified as M
-import System.Console.Haskeline (defaultSettings, runInputT)
+import System.Console.Haskeline (defaultSettings, runInputT, setComplete)
 import System.IO
 
 import Env
@@ -17,5 +18,9 @@ main = do
         putStrLn "Error loading standard definitions: "
         print e
     )
-    (runInputT defaultSettings . repl)
+    ( \env0 -> do
+        envRef <- newIORef env0
+        let settings = setComplete (nameCompletion envRef) defaultSettings
+        runInputT settings (repl envRef)
+    )
     (loadStringDefs M.empty stddefs)
