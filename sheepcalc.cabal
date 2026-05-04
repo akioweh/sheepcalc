@@ -80,6 +80,7 @@ executable sheepcalc
                     , containers >= 0.7
                     , text >= 2.1.0
                     , text-builder
+                    , haskeline ^>= 0.8
 
     -- Directories containing source files.
     hs-source-dirs:   app

@@ -1,6 +1,7 @@
 module Main where
 
 import Data.Map qualified as M
+import System.Console.Haskeline (defaultSettings, runInputT)
 import System.IO
 
 import Env
@@ -16,5 +17,5 @@ main = do
         putStrLn "Error loading standard definitions: "
         print e
     )
-    repl
+    (runInputT defaultSettings . repl)
     (loadStringDefs M.empty stddefs)
