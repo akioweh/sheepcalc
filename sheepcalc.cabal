@@ -52,7 +52,7 @@ extra-doc-files:    README.md
 -- extra-source-files:
 
 common warnings
-    ghc-options:      -Wall
+    ghc-options:      -Wall -threaded
 
 executable sheepcalc
     -- Import common warning flags.
@@ -81,6 +81,8 @@ executable sheepcalc
                     , text >= 2.1.0
                     , text-builder
                     , haskeline ^>= 0.8
+                    , unix ^>= 2.8
+                    , async ^>= 2.2
 
     -- Directories containing source files.
     hs-source-dirs:   app
