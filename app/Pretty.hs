@@ -35,16 +35,16 @@ walk p (DApp f x) =
       ch = case f of
         BoundVar 1 -> succ <$> num wx
         _ -> Nothing
-   in Walk ch (_paren p appP (pstr wf <> " " <> pstr wx))
+   in Walk ch (parenIf p appP (pstr wf <> " " <> pstr wx))
 walk p (DAbs (DAbs body)) =
   let wb = walk topP body
    in Walk Nothing $ case num wb of
         Just n -> string (show n)
-        Nothing -> _paren p lamP ("λ.λ." <> pstr wb)
+        Nothing -> parenIf p lamP ("λ.λ." <> pstr wb)
 walk p (DAbs m) =
-  Walk Nothing (_paren p lamP ("λ." <> pstr (walk topP m)))
+  Walk Nothing (parenIf p lamP ("λ." <> pstr (walk topP m)))
 
-_paren :: Int -> Int -> TextBuilder -> TextBuilder
-_paren p q t
+parenIf :: Int -> Int -> TextBuilder -> TextBuilder
+parenIf p q t
   | p > q = "(" <> t <> ")"
   | otherwise = t

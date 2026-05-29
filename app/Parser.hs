@@ -2,6 +2,7 @@ module Parser (
   parseExpr,
   parseLine,
   Stmt (..),
+  notIdentChars,
 ) where
 
 import Control.Applicative (some)
@@ -59,5 +60,9 @@ abstraction = do
 var :: Parser NExpr
 var = NVar <$> identifier
 
+-- | characters that may not appear in identifiers (used by the REPL to word-break)
+notIdentChars :: String
+notIdentChars = " ()\\.=\n\tλ"
+
 identifier :: Parser String
-identifier = lexeme (some (noneOf " ()\\.=\n\tλ")) <?> "variable name"
+identifier = lexeme (some (noneOf notIdentChars)) <?> "variable name"

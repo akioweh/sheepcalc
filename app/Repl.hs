@@ -6,6 +6,7 @@ module Repl (
 import Control.Concurrent (ThreadId, killThread, myThreadId, throwTo)
 import Control.Concurrent.Async (asyncThreadId, waitCatch, withAsync)
 import Control.Exception (evaluate, finally)
+import Control.Monad (void)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isSpace, isUpper, toLower)
 import Data.IORef (IORef, atomicWriteIORef, modifyIORef', newIORef, readIORef)
@@ -39,9 +40,8 @@ type WorkerSlot = IORef (Maybe ThreadId)
 this replaces the default handler
 -}
 installInterruptHandler :: WorkerSlot -> ThreadId -> IO ()
-installInterruptHandler slot mainTid = do
-  _ <- installHandler sigINT (Catch handler) Nothing
-  return ()
+installInterruptHandler slot mainTid =
+  void $ installHandler sigINT (Catch handler) Nothing
  where
   handler = do
     mtid <- readIORef slot
@@ -94,9 +94,8 @@ repl envRef = do
 
 -- | tab completion: matches prefixes against names defined in the current env (smart-case)
 nameCompletion :: IORef Env -> CompletionFunc IO
-nameCompletion envRef = completeWord Nothing wordBreakChars lookupNames
+nameCompletion envRef = completeWord Nothing notIdentChars lookupNames
  where
-  wordBreakChars = " ()\\.=\t\nλ" -- same chars the parser excludes from identifiers
   lookupNames prefix = do
     env <- readIORef envRef
     let matches = if any isUpper prefix then isPrefixOf else isPrefixOfCI

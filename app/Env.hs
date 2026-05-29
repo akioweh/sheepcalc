@@ -1,7 +1,6 @@
 module Env (
   Env,
   resolve,
-  church,
   fullEval,
   loadStringDef,
   loadStringDefs,
