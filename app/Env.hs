@@ -27,6 +27,12 @@ type Env = M.Map Name DExpr
 fullEval :: Env -> NExpr -> DExpr
 fullEval env = eval . resolve env . fromNamed
 
+{- | expand named expression, with name substitution, but without evaluation/reduction,
+into indexed expression
+-}
+expand :: Env -> NExpr -> DExpr
+expand env = resolve env . fromNamed
+
 -- | substitue free variables in expression using definitions in env
 resolve :: Env -> DExpr -> DExpr
 resolve env = go
@@ -46,8 +52,8 @@ loadStringDefs = foldM loadStringDef
 loadStringDef :: Env -> (Name, String) -> Either ParseError Env
 loadStringDef env' (n, sexpr) = do
   nexpr <- parseExpr sexpr
-  return $ M.insert n (fullEval env' nexpr) env'
+  return $ M.insert n (expand env' nexpr) env'
 
 -- | adds a new definition to env
 loadDef :: Env -> (Name, NExpr) -> Env
-loadDef env (n, nexpr) = M.insert n (fullEval env nexpr) env
+loadDef env (n, nexpr) = M.insert n (expand env nexpr) env
